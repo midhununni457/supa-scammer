@@ -1,12 +1,95 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
 
 function App() {
+  const [url, setUrl] = useState("");
+  const [msg, setMsg] = useState("");
+  const [status, setStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+    const response = await fetch(`${backendUrl}/api/urls`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+    });
+    if (response.ok) {
+      setMsg("URL added successfully");
+      setStatus("success");
+      setIsLoading(false);
+      console.log("URL added successfully");
+    } else {
+      setMsg("Error adding URL. Please check if it is valid.");
+      setStatus("error");
+      setIsLoading(false);
+      console.error("Error adding URL");
+    }
+  };
   return (
-    <>
-      <h1>Hello, World!</h1>
-    </>
-  )
+    <div className="bg-[#121212] relative w-screen h-screen pt-25 px-5 flex flex-col justify-start items-center gap-4">
+      <img
+        src="bg.png"
+        alt="Background"
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+      />
+      <div className="relative z-10 w-full flex flex-col justify-center items-center gap-12">
+        {/* Header Content */}
+        <div className="text-center space-y-6 mb-5">
+          <div className="flex items-center justify-center mb-10">
+            <h1 className="text-5xl font-bold text-white">Supa</h1>
+            <h1 className="text-5xl font-bold text-[#3ECF8E]">Scammer</h1>
+          </div>
+
+          <h2 className="text-3xl font-semibold text-white mb-3">
+            Keep your Supabase database alive
+          </h2>
+
+          <p className="text-[#9CA3AF] font-semibold text-base leading-relaxed max-w-xl">
+            Prevent your Supabase database from pausing due to inactivity.
+            Simply add your database connection string and we'll ping it
+            regularly to keep it active.
+          </p>
+        </div>
+
+        {/* Form Section */}
+        <div className="w-full flex flex-col justify-center items-start gap-2">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex justify-center items-center gap-3"
+          >
+            <input
+              type="text"
+              placeholder="Enter connection string"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              className="px-5 py-2 w-full sm:w-2/3 md:w-2/5 bg-[#1C1C1C] text-sm text-white placeholder-[#4D4D4D] border border-[#4D4D4D] rounded-sm focus:outline-2 focus:outline-[#22384F]"
+            />
+            <button
+              type="submit"
+              className={`px-5 py-2 w-32 ${
+                isLoading ? "bg-[#017344]" : "bg-[#006239]"
+              } rounded-sm border border-[#198554] text-sm font-semibold text-white focus:outline-2 focus:outline-[#22384F] cursor-pointer`}
+            >
+              {isLoading ? "Adding..." : "Add"}
+            </button>
+          </form>
+          {msg && (
+            <p
+              className={`${
+                status === "success" ? "text-[#02814c]" : "text-[#E54D2E]"
+              } text-sm font-semibold`}
+            >
+              {msg}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
