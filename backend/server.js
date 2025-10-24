@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use("/api", routes);
 
-cron.schedule("*/10 * * * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   console.log("Running daily ping...");
   try {
     const res = await fetch("http://localhost:3001/api/urls");
