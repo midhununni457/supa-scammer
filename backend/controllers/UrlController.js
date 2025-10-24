@@ -1,7 +1,6 @@
 const {encrypt} = require('../utils/encryption');
 const {pingDb} = require('../utils/pinger');
-const {PrismaClient} = require('../generated/prisma');
-const prisma = new PrismaClient();
+const {getAllUrls, createUrl} = require('../db/url');
 
 class UrlController {
     addUrl = async (req, res) => {
@@ -12,11 +11,7 @@ class UrlController {
                 return res.status(400).json({error: "Invalid URL or Database Unreachable"});
             }
             const encryptedUrl = encrypt(url);
-            const newUrl = await prisma.url.create({
-                data: {
-                    url: encryptedUrl
-                }
-            });
+            const newUrl = await createUrl(encryptedUrl);
             res.status(201).json(newUrl);
         } catch (error) {
             console.error("Error adding URL:", error);
@@ -26,7 +21,7 @@ class UrlController {
 
     getUrls = async (req, res) => {
         try {
-            const urls = await prisma.url.findMany();
+            const urls = await getAllUrls();
             res.status(200).json(urls);
         } catch (error) {
             console.error("Error fetching URLs:", error);

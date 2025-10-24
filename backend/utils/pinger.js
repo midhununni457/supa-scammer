@@ -13,7 +13,11 @@ async function pingDb(connString) {
         console.error("Database ping failed:", error);
         return false;
     } finally {
-        await client.end();
+        try {
+            await client.end();
+        } catch (e) {
+            console.error("Error closing database connection:", e);
+        }
     }
 }
 
