@@ -1,4 +1,5 @@
 const {encrypt} = require('../utils/encryption');
+const {pingDb} = require('../utils/pinger');
 const {PrismaClient} = require('../generated/prisma');
 const prisma = new PrismaClient();
 
@@ -6,9 +7,11 @@ class UrlController {
     addUrl = async (req, res) => {
         try {
             const {url} = req.body;
-            console.log("Received URL to add:", url);
+            const isValid = await pingDb(url);
+            if (!isValid) {
+                return res.status(400).json({error: "Invalid URL or Database Unreachable"});
+            }
             const encryptedUrl = encrypt(url);
-            console.log("Encrypted URL:", encryptedUrl);
             const newUrl = await prisma.url.create({
                 data: {
                     url: encryptedUrl

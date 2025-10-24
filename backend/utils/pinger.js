@@ -8,8 +8,10 @@ async function pingDb(connString) {
         await client.connect();
         await client.query("SELECT 1");
         console.log("Database ping successful");
+        return true;
     } catch (error) {
         console.error("Database ping failed:", error);
+        return false;
     } finally {
         await client.end();
     }
