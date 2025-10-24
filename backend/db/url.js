@@ -23,7 +23,38 @@ const createUrl = async (encryptedUrl) => {
     }
 };
 
+const updateErrorCount = async (id, count) => {
+    try {
+        const updatedUrl = await prisma.url.update({
+            where: { id },
+            data: {
+                errorCount: count === 0 ? 0 : { increment: 1 }
+            }
+        });
+        return updatedUrl;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const deleteUrls = async () => {
+    try {
+        const deletedUrls = await prisma.url.deleteMany({
+            where: {
+                errorCount: {
+                    gt: 10
+                }
+            }
+        });
+        return deletedUrls;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getAllUrls,
-    createUrl
+    createUrl,
+    updateErrorCount,
+    deleteUrls
 };

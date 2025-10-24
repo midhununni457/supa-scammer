@@ -1,7 +1,6 @@
-const router = require('express').Router();
-const UrlController = require('../controllers/UrlController');
+const router = require("express").Router();
+const { addUrl } = require("../controllers/UrlController");
 
-router.post('/urls', UrlController.addUrl);
-router.get('/urls', UrlController.getUrls);
+router.post("/urls", addUrl);
 
 module.exports = router;
