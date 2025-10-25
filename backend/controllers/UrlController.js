@@ -20,4 +20,8 @@ const addUrl = async (req, res) => {
   }
 };
 
-module.exports = { addUrl };
+const ping = (req, res) => {
+  res.json({ status: "ok" });
+};
+
+module.exports = { addUrl, ping };
