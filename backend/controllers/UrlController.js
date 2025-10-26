@@ -21,6 +21,7 @@ const addUrl = async (req, res) => {
 };
 
 const ping = (req, res) => {
+  console.log("Ping received");
   res.json({ status: "ok" });
 };
 
