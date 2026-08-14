@@ -140,6 +140,22 @@ Database connection strings contain sensitive connection details. SupaScammer pr
 
 ---
 
+## Automated Daily Pings (GitHub Actions)
+
+This project includes a GitHub Actions workflow (`.github/workflows/daily-ping.yml`) that automatically executes daily database pings at `00:00 UTC` without needing a 24/7 server running.
+
+### Setting Up GitHub Repository Secrets
+
+To enable automated pings:
+1. Go to your repository on GitHub.
+2. Click **Settings** > **Secrets and variables** > **Actions**.
+3. Add the following **Repository secrets**:
+   - `DATABASE_URL`: Your database connection URL.
+   - `DIRECT_URL`: Direct database connection URL (for Prisma/Supabase).
+   - `ENCRYPTION_KEY`: The AES-256 encryption key matching your backend `.env`.
+
+---
+
 ## License
 
 This project is licensed under the ISC License.
